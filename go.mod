@@ -3,9 +3,8 @@ module github.com/llifezou/fil-sdk
 go 1.17
 
 replace (
-	github.com/filecoin-project/specs-actors/v7 v7.0.0-20211222192039-c83bea50c402 => github.com/filecoin-project/specs-storage v0.2.0
+	github.com/filecoin-project/specs-actors/v7 v7.0.0-20211222192039-c83bea50c402 => github.com/filecoin-project/specs-actors/v7 v7.0.0
 )
-
 require (
 	github.com/filecoin-project/filecoin-ffi v0.30.4-0.20200910194244-f640612a1a1f
 	github.com/filecoin-project/go-address v0.0.6

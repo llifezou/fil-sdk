@@ -1,6 +1,7 @@
 package bls_test
 
 import (
+	"github.com/llifezou/hdwallet"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -15,7 +16,16 @@ import (
 )
 
 func TestRoundtrip(t *testing.T) {
-	pk, err := sigs.Generate(crypto.SigTypeBLS)
+	mnemonic, err := hdwallet.NewMnemonic()
+	if err != nil {
+		t.Fatal(err)
+	}
+	seed, err := hdwallet.GenerateSeedFromMnemonic(mnemonic, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	pk, err := sigs.Generate(crypto.SigTypeBLS, seed)
 	require.NoError(t, err)
 
 	ki := types.KeyInfo{
