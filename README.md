@@ -3,4 +3,7 @@ filecoin sdk, developer friendly
 
 extracted from lotus, packaged
 
-will gradually improve
+**support**
+  - filecoin sigs package that supports hdwallet
+
+will gradually improve ...
