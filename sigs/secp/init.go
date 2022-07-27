@@ -1,10 +1,8 @@
 package secp
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"errors"
 	"fmt"
+	"github.com/btcsuite/btcd/btcec"
 	"github.com/filecoin-project/go-address"
 	"github.com/filecoin-project/go-crypto"
 	crypto2 "github.com/filecoin-project/go-state-types/crypto"
@@ -15,20 +13,16 @@ import (
 type secpSigner struct{}
 
 func (secpSigner) GenPrivate(seed []byte) ([]byte, error) {
-	seedSha256 := sha256.Sum256(seed)
-	ecdsaSeed := append(seed, seedSha256[:]...)
+	privateKey, _ := btcec.PrivKeyFromBytes(btcec.S256(), seed)
+	privateKeyECDSA := privateKey.ToECDSA()
 
-	// ecdsaSeed require length of 40
-	if len(ecdsaSeed) < 40 {
-		return nil, errors.New("seed is too short")
-	}
+	privkey := make([]byte, crypto.PrivateKeyBytes)
+	blob := privateKeyECDSA.D.Bytes()
 
-	priv, err := crypto.GenerateKeyFromSeed(bytes.NewReader(ecdsaSeed))
+	// the length is guaranteed to be fixed, given the serialization rules for secp2561k curve points.
+	copy(privkey[crypto.PrivateKeyBytes-len(blob):], blob)
 
-	if err != nil {
-		return nil, err
-	}
-	return priv, nil
+	return privkey, nil
 }
 
 func (secpSigner) ToPublic(pk []byte) ([]byte, error) {
